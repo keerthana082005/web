@@ -30,4 +30,25 @@ document.addEventListener("DOMContentLoaded",(event)=>{
         }else{ 
             target.classList.toggle("fst-italic"); 
         } 
+    }) resetBtn.addEventListener("click",()=>{ 
+      
+        target.style.fontSize=""; 
+        target.style.color=""; 
+      fontSize.value="12px"; 
+      color.value="black"; 
+      if(fontStyle.classList.contains("active")){ 
+        //fontWeight.classList.toggle("italicbtn"); 
+        target.classList.toggle("fst-italic"); 
+        fontStyle.classList.remove("active"); 
+    } 
+ 
+    if(fontWeight.classList.contains("active")){ 
+        //fontWeight.classList.toggle("italicbtn"); 
+        target.classList.toggle("fw-bold"); 
+        fontWeight.classList.remove("active"); 
+    } 
+ 
+ 
     }) 
+})
+    
