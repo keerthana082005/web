@@ -1,71 +1,33 @@
-const canvas=document.getElementById("sketchPad"); 
-const ctx=canvas.getContext("2d"); 
-const redBtn=document.getElementById("redBtn"); 
-const blueBtn=document.getElementById("blueBtn"); 
-const eraserBtn=document.getElementById("eraserBtn"); 
-const greenBtn=document.getElementById("greenBtn"); 
-const blackBtn=document.getElementById("blackBtn"); 
-let drawing=false; 
-let currentColorDisplay="black"; 
-const currentColor=document.getElementById("currentColor"); 
-const setColor=(color)=>{ 
+document.addEventListener("DOMContentLoaded",(event)=>{ 
+    const fontSize=document.getElementById("fontSizeSelect"); 
+    const color=document.getElementById("fontColorSelect"); 
+    const fontWeight=document.getElementById("boldBtn"); 
+    const fontStyle=document.getElementById("italicBtn"); 
+    const resetBtn=document.getElementById("resetBtn"); 
+    const target=document.getElementById("editor"); 
+   
+    fontSize.addEventListener("change",()=>{ 
+        target.style.fontSize=fontSize.value.trim(); 
+    }) 
  
-    currentColorDisplay=color; 
-    if(color=="white"){ 
-        currentColor.textContent="White (Eraser)"; 
-    } 
+    color.addEventListener("change",()=>{ 
+        target.style.color=color.value.trim(); 
+    }) 
      
-    else{ 
-    currentColor.textContent=(color.charAt(0).toUpperCase()+color.slice(1)).trim();} 
+    
+    fontWeight.addEventListener("click",()=>{ 
  
-} 
+        if(fontWeight.classList.contains("active")){ 
+                  target.classList.toggle("fw-bold"); 
+        }else{ 
+            target.classList.toggle("fw-bold"); 
+        } 
+    }) 
  
-blackBtn.addEventListener("click",()=>{ 
-    setColor("black"); 
-}) 
- 
-redBtn.addEventListener("click",()=>{ 
-    setColor("red"); 
-}) 
-blueBtn.addEventListener("click",()=>{ 
-    setColor("blue"); 
-}) 
-greenBtn.addEventListener("click",()=>{ 
-    setColor("green"); 
-}) 
- 
-eraserBtn.addEventListener("click",()=>{ 
-    setColor("white"); 
-}) 
- 
- 
-document.getElementById("clearBtn").addEventListener("click",()=>{ 
-    ctx.clearRect(0,0,canvas.width,canvas.height); 
-    ctx.fillStyle="#ffffff"; 
-    ctx.fillRect(0,0,canvas.width,canvas.height); 
- 
-}) 
- 
-canvas.addEventListener("mousedown",(e)=>{ 
-    drawing=true; 
-    ctx.beginPath(); 
-    ctx.moveTo(e.offsetX,e.offsetY); 
-}) 
- 
- 
-canvas.addEventListener("mousemove",(e)=>{ 
-    if(drawing) 
-    { 
-        ctx.lineTo(e.offsetX,e.offsetY); 
-        ctx.strokeStyle=currentColorDisplay; 
-        ctx.lineWidth=2; 
-        ctx.stroke(); 
-    } 
-}) 
- 
-canvas.addEventListener("mouseup",()=>{ 
-    drawing=false; 
-}) 
- 
-canvas.addEventListener("mouseleave",()=>{ 
-    drawing=false;}) 
+    fontStyle.addEventListener("click",()=>{ 
+        if(fontStyle.classList.contains("active")){ 
+                      target.classList.toggle("fst-italic"); 
+        }else{ 
+            target.classList.toggle("fst-italic"); 
+        } 
+    }) 
