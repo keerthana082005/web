@@ -1,99 +1,141 @@
  import React, { useState } from 'react';
- import 'bootstrap/dist/css/bootstrap.min.css';
- const initialOrders = [
-  { id: 1, item: 'Burger', quantity: 2, price: 150 },
-  { id: 2, item: 'Pizza', quantity: 1, price: 300 },
-  { id: 3, item: 'Pasta', quantity: 3, price: 200 },
+ const initialInventory = [
+  { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', stock: 12, 
+price: 10.5 },
+  { id: 2, title: '1984', author: 'George Orwell', stock: 8, price: 9.0 },
+  { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee', stock: 15, 
+price: 12.0 },
  ];
- export default function FoodOrder() {
-  const [orders, setOrders] = useState(initialOrders);
-  const [newOrder, setNewOrder] = useState({ item: '', quantity: '', price: 
-'' });
-  const handleNewOrderChange = (e) => {
+ export default function Bookstore() {
+  const [inventory, setInventory] = useState(initialInventory);
+  const [newBook, setNewBook] = useState({
+    title: '',
+    author: '',
+    stock: '',
+    price: '',
+  });
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewOrder((prev) => ({ ...prev, [name]: value }));
+    setNewBook((prev) => ({ ...prev, [name]: value }));
   };
-  const handleAddOrder = () => {
-    const { item, quantity, price } = newOrder;
-    if (item.trim() === '' || quantity === '' || price === '') {
+  const handleAddBook = () => {
+    const { title, author, stock, price } = newBook;
+    if (
+      title.trim() === '' ||
+      author.trim() === '' ||
+      stock === '' ||
+      price === ''
+    ) {
       alert('Please fill in all fields');
       return;
     }
-    const nextId = orders.length === 0 ? 1 : Math.max(...orders.map((o) => 
-o.id)) + 1;
-    const toAdd = {
+    const nextId =
+      inventory.length === 0
+        ? 1
+        : Math.max(...inventory.map((b) => b.id)) + 1;
+    const book = {
       id: nextId,
-      item: item.trim(),
-      quantity: Number(quantity),
+      title: title.trim(),
+      author: author.trim(),
+      stock: Number(stock),
       price: Number(price),
     };
-    setOrders((prev) => [...prev, toAdd]);
-    setNewOrder({ item: '', quantity: '', price: '' });
+    setInventory((prev) => [...prev, book]);
+    // clear inputs
+    setNewBook({
+      title: '',
+      author: '',
+      stock: '',
+      price: '',
+    });
   };
+  const formatPrice = (n) =>
+    `$${Number(n).toFixed(2)}`;
   return (
-    <div className="container my-4">
-      <h1 className="text-primary text-center mb-4">Food Order Management</h1>
-      <div className="table-responsive">
-        <table className="table table-striped table-bordered" role="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Food Item</th>
-              <th>Quantity</th>
-              <th>Price ($)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((o) => (
-              <tr key={o.id}>
-                <td>{o.id}</td>
-                <td>{o.item}</td>
-                <td>{o.quantity}</td>
-                <td>{o.price}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <h2 className="text-success text-center mt-5 mb-3">Add New Food Order</h2>
+    <div className="container my-5">
+      <h1 className="fw-bold text-primary text-center">Bookstore Inventory</h1>
+       <p className="text-muted text-center">
+        Manage your book collection with ease
+      </p>
+      <h2 className="mt-4 mb-3">Available Books</h2>
       <div className="row g-3">
-        <div className="col-md-5">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Food Item"
-            name="item"
-            value={newOrder.item}
-            onChange={handleNewOrderChange}
-          />
-        </div>
-        <div className="col-md-3">
-          <input
-            type="number"
-            className="form-control"
-            placeholder="Quantity"
-            name="quantity"
-            value={newOrder.quantity}
-            onChange={handleNewOrderChange}
-            min="0"
-          />
-        </div>
-        <div className="col-md-2">
-          <input
-            type="number"
-            className="form-control"
-            placeholder="Price ($)"
-            name="price"
-            value={newOrder.price}
-            onChange={handleNewOrderChange}
-            step="0.01"
-            min="0"
-          />
-        </div>
-        <div className="col-md-2 d-grid">
-          <button className="btn btn-success w-100" onClick={handleAddOrder}>
-            Add Order
-          </button>
+        {inventory.map((book) => (
+          <div className="col-md-4" key={book.id}>
+            <div className="card h-100 shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title text-success">{book.title}</h5>
+                <p className="card-subtitle mb-2 text-muted">by 
+{book.author}</p>
+                <p className="mb-1">
+                  <span className="fw-bold">Stock:</span> {book.stock}
+                </p>
+                <p className="mb-0">
+                  <span className="fw-bold">Price:</span> 
+{formatPrice(book.price)}
+                </p>
+              </div>
+              <div className="card-footer bg-transparent border-0">
+                <span className="badge bg-info">ID: {book.id}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <h2 className="mt-5 mb-3">Add a New Book</h2>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-3">
+              <input
+                className="form-control"
+                type="text"
+                name="title"
+                placeholder="Book Title"
+                value={newBook.title}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                className="form-control"
+                type="text"
+                name="author"
+                placeholder="Author"
+                value={newBook.author}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-2">
+              <input
+                className="form-control"
+                type="number"
+                name="stock"
+                placeholder="Stock"
+                min="0"
+                value={newBook.stock}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-2">
+              <input  className="form-control"
+                type="number"
+                name="price"
+                placeholder="Price ($)"
+                step="0.01"
+                min="0"
+                value={newBook.price}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-2 d-grid">
+              <button
+                className="btn btn-success w-100"
+                onClick={handleAddBook}
+              >
+                Add Book
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
